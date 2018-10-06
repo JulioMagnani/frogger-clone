@@ -5,9 +5,9 @@ var Enemy = function() {
     this.x = -100;
     this.y;
 
-    //The enemies can have one of five randomly defined speeds: 
-    //75, 150, 225, 300 or 375 pixels per tick; 
-    this.speed = Math.floor((Math.random() * 3) + 1) * 150;
+    //The enemies can have one of eight randomly defined speeds: 
+    //(put speeds here)
+    this.speed = Math.floor((Math.random() * 8) + 1) * 120;
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -164,7 +164,12 @@ Selector.prototype.handleSelectorInput = function(keyPressed){
                 
                 player.handleInput(allowedKeys[e.keyCode]);
             });
-        
+            
+            startingTime = Date.now();
+
+            for (var i=0; i<150; i++){
+                allEnemies[i].timeToMove = (Date.now()+(i*350));
+            }
         }
 }
 
@@ -180,7 +185,7 @@ let isCharacterSelected = false;
 
 let selector = new Selector();
 
-const startingTime = Date.now();
+let startingTime;
 
 //Counts the amount of times the player has reached the water
 let wins = 0;
@@ -191,7 +196,6 @@ let deaths = 0;
 for (var i=0; i<150; i++){
     allEnemies[i] = new Enemy();
     allEnemies[i].startingY();
-    allEnemies[i].timeToMove = (Date.now()+(i*350));
 }
 
 document.addEventListener('keyup', function(e){
