@@ -1,13 +1,13 @@
 // Enemies our player must avoid
-var Enemy = function(y, speed) {
+var Enemy = function(startingY, randomSpeed) {
 
     //X and Y axis positions of the enemy on the canvas
     this.x = -100;
-    this.y = y;
+    this.y = startingY;
 
     //The enemies can have one of eight randomly defined speeds: 
     //(put speeds here)
-    this.speed = speed;
+    this.speed = randomSpeed;
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
