@@ -143,29 +143,23 @@ var Engine = (function(global) {
         else if(isGameOver()){
             gameOverScreen();    
         }else{
+            renderScore();
             renderEntities();
         }
-
-        renderScore();
     }
 
     function gameOverScreen(){
         ctx.font = '30pt Impact';
-        //ctx.textAlign = 'center';
+        ctx.textAlign = 'center';
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 1;
         ctx.fillStyle = 'white';
-        ctx.fillText(`WE'RE OUTTA INSECTS!`, 80, canvas.height/2 - 20 );
-        ctx.strokeText(`WE'RE OUTTA INSECTS!`, 80, canvas.height/2 - 22 );
-        ctx.font = '25px Impact';
-        ctx.lineWidth = 1.7;
-        ctx.fillText(`Refresh screen to play again`, 107, canvas.height/2 + 20);
-        ctx.strokeText(`Refresh screen to play again`, 107, canvas.height/2 + 20);
-
+        ctx.fillText(`WE'RE OUTTA INSECTS!`, canvas.width/2, canvas.height/2 - 20 );
+        ctx.strokeText(`WE'RE OUTTA INSECTS!`, canvas.width/2, canvas.height/2 - 20 );
     }
 
     function isGameOver(){
-        if(allEnemies[allEnemies.length-1].x > 505)
+        if(Date.now()- startingTime>20000)
             return true;
         else
             return false;
@@ -191,8 +185,7 @@ var Engine = (function(global) {
     function renderScore(){
         ctx.fillStyle = 'white';
         ctx.font = '16px Georgia bold'; 
-        ctx.fillText(`WINS: ${wins}`, 25, 570);
-        ctx.fillText(`DEATHS: ${deaths}`, 415, 570);
+        ctx.fillText(`SCORE: ${score}`, 18, 570);
     }
 
     /* This function is called by the render function and is called on each game

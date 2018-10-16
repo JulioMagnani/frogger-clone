@@ -1,39 +1,32 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(y, speed) {
 
     //X and Y axis positions of the enemy on the canvas
     this.x = -100;
-    this.y;
+    this.y = y;
 
     //The enemies can have one of eight randomly defined speeds: 
     //(put speeds here)
-    this.speed = Math.floor((Math.random() * 8) + 1) * 120;
+    this.speed = speed;
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 
-    //Establishes the point in time in which the enemy will start moving
-    //It's necessary for the game to keep a constant dificulty
-    this.timeToMove;
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     
-    if(this.timeToMove<Date.now()) this.x += dt*this.speed;
+    if(this.x<800) this.x += dt*this.speed;
+    else{
+        this.x = -100;
+        this.speed = Math.floor((Math.random() * 8) + 1) * 120;
+    }
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-};
-
-//Randomly define in which of the three paved lanes
-//each enemy is going to spawn at
-Enemy.prototype.startingY = function() {
-    const lane = Math.floor((Math.random() * 3) + 1)
-    if(lane === 1) this.y = 55;
-    else this.y = 55 + (lane-1)*83;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -61,7 +54,7 @@ Player.prototype.update = function() {
 //position in case it reaches the water
 Player.prototype.checkWin = function() {
         if(player.y<30){
-            wins+=1;
+            score+=10;
             player.goToStart();
         }
 };
@@ -72,7 +65,7 @@ Player.prototype.checkWin = function() {
 Player.prototype.checkCollisions = function() {
     for (const enemy of allEnemies){
         if((player.x-50 <= enemy.x) && (player.x+50 >= enemy.x) && (player.y-50<=enemy.y) && (player.y+50 >= enemy.y)){
-            deaths+=1;
+            if(score>0) score -= 10;
             player.goToStart();
         }
     }
@@ -166,10 +159,6 @@ Selector.prototype.handleSelectorInput = function(keyPressed){
             });
             
             startingTime = Date.now();
-
-            for (var i=0; i<150; i++){
-                allEnemies[i].timeToMove = (Date.now()+(i*350));
-            }
         }
 }
 
@@ -188,15 +177,16 @@ let selector = new Selector();
 let startingTime;
 
 //Counts the amount of times the player has reached the water
-let wins = 0;
+let score = 0;
 
-//Counts the amount of times the player has collided with a bug
-let deaths = 0;
-
-for (var i=0; i<150; i++){
-    allEnemies[i] = new Enemy();
-    allEnemies[i].startingY();
-}
+allEnemies = [
+    new Enemy(55, Math.floor((Math.random() * 8) + 1) * 120),
+    new Enemy(138, Math.floor((Math.random() * 8) + 1) * 120),
+    new Enemy(220, Math.floor((Math.random() * 8) + 1) * 120),
+    new Enemy(55, Math.floor((Math.random() * 8) + 1) * 120),
+    new Enemy(138, Math.floor((Math.random() * 8) + 1) * 120),
+    new Enemy(220, Math.floor((Math.random() * 8) + 1) * 120)
+];
 
 document.addEventListener('keyup', function(e){
     const allowedKeys = {
@@ -207,17 +197,3 @@ document.addEventListener('keyup', function(e){
 
     selector.handleSelectorInput(allowedKeys[e.keyCode]);
 });
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-
-/*document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-
-    player.handleInput(allowedKeys[e.keyCode]);
-});*/
